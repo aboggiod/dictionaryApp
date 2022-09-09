@@ -1,7 +1,21 @@
 import javax.swing.*;
+import java.io.*;
+import java.util.stream.Collectors;
 
 public class Dictionary {
     public static void main(String[] args) {
-        JOptionPane.showMessageDialog(null, "Hello!");
+        String word = JOptionPane.showInputDialog("Enter a word:");
+        String command = "" + word;
+        Runtime rt = Runtime.getRuntime();
+        try{Process pr = rt.exec("curl -X GET https://api.dictionaryapi.dev/api/v2/entries/en/" + word);
+
+//Java 8 version
+        String result = new BufferedReader(
+                new InputStreamReader(pr.getInputStream()))
+                .lines()
+                .collect(Collectors.joining("\n"));
+        JOptionPane.showMessageDialog(null, result);}
+        catch(IOException e){System.out.println("Oops - error in CURL");}
+
     }
 }
